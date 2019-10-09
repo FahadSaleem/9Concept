@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorGreyLight"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/add_shop_header"
+        android:background="#FFFFFF"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/backInventory"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:layout_width="36dp"
+            android:tint="@color/colorAccent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_height="36dp"/>
+
+        <TextView
+            android:id="@+id/heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_centerVertical="true"
+            android:text="Shipping Address"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/backInventory"
+            android:fontFamily="@font/appfont_medium"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="9dp"
+            android:id="@+id/checkout"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/continue_greyed"
+            android:fontFamily="@font/appfont_bold"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:singleLine="true"
+            android:text="Checkout"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_marginTop="9dp"
+        android:layout_below="@+id/add_shop_header"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:orientation="vertical">
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:lineSpacingMultiplier="1.21"
+                    android:text="Full Name"
+                    android:fontFamily="@font/appfont_medium"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/fullNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="0.6773"
+                    android:background="@drawable/input_et"
+                    android:fontFamily="@font/appfont_regular"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:lineSpacingMultiplier="1.21"
+                    android:text="Street Address"
+                    android:fontFamily="@font/appfont_medium"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/streetAddressET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="0.6773"
+                    android:fontFamily="@font/appfont_regular"
+                    android:background="@drawable/input_et"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:lineSpacingMultiplier="1.21"
+                    android:text="City"
+                    android:fontFamily="@font/appfont_medium"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/cityET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="0.6773"
+                    android:background="@drawable/input_et"
+                    android:inputType="text"
+                    android:fontFamily="@font/appfont_regular"
+                    android:paddingLeft="15dp"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:lineSpacingMultiplier="1.21"
+                    android:text="State"
+                    android:fontFamily="@font/appfont_medium"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/stateET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="0.6773"
+                    android:background="@drawable/input_et"
+                    android:inputType="text"
+                    android:fontFamily="@font/appfont_regular"
+                    android:paddingLeft="15dp"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:lineSpacingMultiplier="1.21"
+                    android:text="Zip Code"
+                    android:fontFamily="@font/appfont_medium"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/zipCodeET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="0.6773"
+                    android:background="@drawable/input_et"
+                    android:inputType="number"
+                    android:fontFamily="@font/appfont_regular"
+                    android:paddingLeft="15dp"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:lineSpacingMultiplier="1.21"
+                    android:text="Phone Number"
+                    android:fontFamily="@font/appfont_medium"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/phoneNumberET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="0.6773"
+                    android:background="@drawable/input_et"
+                    android:inputType="number"
+                    android:fontFamily="@font/appfont_regular"
+                    android:paddingLeft="15dp"
+                    android:textColor="#FF0B2031"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+            <TextView
+                android:background="@drawable/continue_shopping_button"
+                android:text="Add a payment method"
+                android:id="@+id/go_selected_images"
+                android:fontFamily="@font/appfont_bold"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginEnd="9dp"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:layout_marginStart="9dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
