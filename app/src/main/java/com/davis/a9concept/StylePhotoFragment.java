@@ -40,12 +40,11 @@ public class StylePhotoFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String SELECTED_IMAGES = "selectedImages";
-    public Size mSelectedSize;
     private StylePhotoViewModel stylePhotoViewModel;
     private LinearLayout mLinearLayout;
     private final int IMAGE_BASE_SIZE = 500;
-    private String mImagePath;
-    private Uri mImageUri = null;
+    private int index = 1;
+    private MyImage mImage;
 
     public static StylePhotoFragment newInstance(int index, ArrayList<String> selectedImages) {
         StylePhotoFragment fragment = new StylePhotoFragment();
@@ -60,7 +59,6 @@ public class StylePhotoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stylePhotoViewModel = ViewModelProviders.of(this).get(StylePhotoViewModel.class);
-        int index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
             ArrayList<String> selectedImages;
@@ -84,8 +82,8 @@ public class StylePhotoFragment extends Fragment {
         stylePhotoViewModel.getSizeList().observe(this, new Observer<ArrayList<Size>>() {
             @Override
             public void onChanged(ArrayList<Size> sizes) {
-                mSelectedSize = sizes.get(0);
-                Log.d("size", mSelectedSize.id + " " + mSelectedSize.value);
+                mImage.size = sizes.get(0);
+                Log.d("size", mImage.size.id + " " + mImage.size.value);
                 for (final Size s : sizes) {
                     mLinearLayout.addView(generateSizeView(s));
                 }
@@ -94,20 +92,20 @@ public class StylePhotoFragment extends Fragment {
         stylePhotoViewModel.getImage().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable final String s) {
-                mImagePath = s;
+                mImage.path = s;
                 loadImage();
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (mSelectedSize.id.equals("1")) {
+                        if (mImage.size.id.equals("1")) {
                             CropImage.activity(Uri.fromFile(new File(s)))
                                     .setAspectRatio(3, 2)
                                     .start(getContext(), StylePhotoFragment.this);
-                        } else if (mSelectedSize.id.equals("2")) {
+                        } else if (mImage.size.id.equals("2")) {
                             CropImage.activity(Uri.fromFile(new File(s)))
                                     .setAspectRatio(2, 1)
                                     .start(getContext(), StylePhotoFragment.this);
-                        } else if (mSelectedSize.id.equals("3")) {
+                        } else if (mImage.size.id.equals("3")) {
                             CropImage.activity(Uri.fromFile(new File(s)))
                                     .setAspectRatio(1, 1)
                                     .start(getContext(), StylePhotoFragment.this);
@@ -126,7 +124,7 @@ public class StylePhotoFragment extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                mImageUri = resultUri;
+                mImage.uri = resultUri;
                 imageView.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -134,17 +132,30 @@ public class StylePhotoFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mImage = SharedData.ResizedImages.getResizedImages(index);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        SharedData.ResizedImages.setResizedImages(index, mImage);
+    }
+
 
     private void loadImage() {
-        if (mImageUri == null) {
+        if (mImage.uri == null) {
             Glide.with(Objects.requireNonNull(getContext()))
-                    .load(mImagePath)
-                    .override(IMAGE_BASE_SIZE * mSelectedSize.width,
-                            IMAGE_BASE_SIZE * mSelectedSize.height)
+                    .load(mImage.path)
+                    .override(IMAGE_BASE_SIZE * mImage.size.width,
+                            IMAGE_BASE_SIZE * mImage.size.height)
                     .centerCrop()
                     .into(imageView);
         } else {
-            imageView.setImageURI(mImageUri);
+            imageView.setImageURI(mImage.uri);
         }
     }
 
@@ -166,7 +177,7 @@ public class StylePhotoFragment extends Fragment {
 
         final FrameLayout frameLayout = new FrameLayout(Objects.requireNonNull(getContext()));
 
-        if (s.id.equals(mSelectedSize.id)) {
+        if (s.id.equals(mImage.size.id)) {
             frameLayout.setBackgroundColor(Color.parseColor("#ABD81B60"));
             textView.setTextColor(Color.parseColor("#FFFFFFFF"));
         } else {
@@ -179,8 +190,8 @@ public class StylePhotoFragment extends Fragment {
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSelectedSize = s;
-                mImageUri = null;
+                mImage.size = s;
+                mImage.uri = null;
                 FrameLayout layout;
                 ViewGroup row = (ViewGroup) view.getParent();
                 for (int itemPos = 0; itemPos < row.getChildCount(); itemPos++) {
@@ -188,7 +199,7 @@ public class StylePhotoFragment extends Fragment {
                     if (view1 instanceof FrameLayout) {
                         layout = (FrameLayout) view1;
                         TextView textView1 = (TextView) layout.getChildAt(0);
-                        if (textView1.getText().equals(mSelectedSize.value)) {
+                        if (textView1.getText().equals(mImage.size.value)) {
                             layout.setBackgroundColor(Color.parseColor("#ABD81B60"));
                             textView1.setTextColor(Color.parseColor("#FFFFFFFF"));
                         } else {
@@ -203,7 +214,19 @@ public class StylePhotoFragment extends Fragment {
         return frameLayout;
     }
 
-    public static class Size {
+    static class MyImage {
+        Size size;
+        Uri uri;
+        String path;
+
+        MyImage(Size size, Uri uri, String path) {
+            this.size = size;
+            this.uri = uri;
+            this.path = path;
+        }
+    }
+
+    static class Size {
         String id;
         String value;
         int height;
@@ -223,7 +246,6 @@ public class StylePhotoFragment extends Fragment {
         private LiveData<ArrayList<Size>> mSizeList = Transformations.map(mIndex, new Function<Integer, ArrayList<Size>>() {
             @Override
             public ArrayList<Size> apply(Integer input) {
-
                 ArrayList list = new ArrayList<Size>() {{
                     add(new Size("1", 3, 2));
                     add(new Size("2", 2, 1));

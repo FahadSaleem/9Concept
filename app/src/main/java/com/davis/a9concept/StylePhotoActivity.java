@@ -37,6 +37,7 @@ public class StylePhotoActivity extends AppCompatActivity {
         StylePhotoPagerAdapter(FragmentManager fm, ArrayList<String> selectedImages) {
             super(fm);
             mSelectedImages = selectedImages;
+            SharedData.ResizedImages.init(mSelectedImages);
         }
 
         @Override
