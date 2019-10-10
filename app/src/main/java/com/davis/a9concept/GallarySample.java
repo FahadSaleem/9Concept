@@ -15,7 +15,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -24,10 +23,13 @@ import java.util.ArrayList;
 
 public class GallarySample extends Activity {
 
-    /** The images. */
+    /**
+     * The images.
+     */
     RelativeLayout continueRL;
-    private ArrayList<String> images;
     Uri currentUri = null;
+    private ArrayList<String> images;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class GallarySample extends Activity {
 
         final ImageView fullscreen;
         fullscreen = findViewById(R.id.fullscreen);
-        GridView gallery = (GridView) findViewById(R.id.galleryGridView);
+        GridView gallery = findViewById(R.id.galleryGridView);
 
         final ImageAdapter adapter = new ImageAdapter(this);
 
@@ -58,8 +60,8 @@ public class GallarySample extends Activity {
                 fullscreen.setVisibility(View.GONE);
                 continueRL.setVisibility(View.GONE);
                 Intent intent = new Intent(GallarySample.this, CropActivity.class);
-                intent.putExtra("size",getIntent().getStringExtra("size"));
-                intent.putExtra("uri",currentUri.toString());
+                intent.putExtra("size", getIntent().getStringExtra("size"));
+                intent.putExtra("uri", currentUri.toString());
                 startActivity(intent);
             }
         });
@@ -68,17 +70,17 @@ public class GallarySample extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,
                                     int position, long arg3) {
-                if (null != images && !images.isEmpty()){
+                if (null != images && !images.isEmpty()) {
 
 
-                   fullScreen();
+                    fullScreen();
                     fullscreen.setVisibility(View.VISIBLE);
                     continueRL.setVisibility(View.VISIBLE);
                     continueRL.bringToFront();
-                Glide.with(getApplicationContext()).load(images.get(position))
-                        .centerCrop()
-                        .into(fullscreen);
-                currentUri = Uri.fromFile(new File(images.get(position)));
+                    Glide.with(getApplicationContext()).load(images.get(position))
+                            .centerCrop()
+                            .into(fullscreen);
+                    currentUri = Uri.fromFile(new File(images.get(position)));
                 }
 
             }
@@ -86,96 +88,6 @@ public class GallarySample extends Activity {
 
     }
 
-    /**
-     * The Class ImageAdapter.
-     */
-    private class ImageAdapter extends BaseAdapter {
-
-        /** The context. */
-        private Activity context;
-
-        /**
-         * Instantiates a new image adapter.
-         *
-         * @param localContext
-         *            the local context
-         */
-        public ImageAdapter(Activity localContext) {
-            context = localContext;
-            images = getAllShownImagesPath(context);
-        }
-
-        public int getCount() {
-            return images.size();
-        }
-
-        public Object getItem(int position) {
-            return position;
-        }
-
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public View getView(final int position, View convertView,
-                            ViewGroup parent) {
-
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int height = displayMetrics.heightPixels;
-            int width = displayMetrics.widthPixels;
-            ImageView picturesView;
-            if (convertView == null) {
-                picturesView = new ImageView(context);
-                picturesView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                picturesView
-                        .setLayoutParams(new GridView.LayoutParams(width/2, width/2));
-
-            } else {
-                picturesView = (ImageView) convertView;
-            }
-
-            Glide.with(context).load(images.get(position))
-                    .centerCrop()
-                    .into(picturesView);
-
-            return picturesView;
-        }
-
-        /**
-         * Getting All Images Path.
-         *
-         * @param activity
-         *            the activity
-         * @return ArrayList with images Path
-         */
-        private ArrayList<String> getAllShownImagesPath(Activity activity) {
-            Uri uri;
-            Cursor cursor;
-            int column_index_data, column_index_folder_name;
-            ArrayList<String> listOfAllImages = new ArrayList<String>();
-            String absolutePathOfImage = null;
-            uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-            String[] projection = { MediaStore.MediaColumns.DATA,
-                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
-
-            cursor = activity.getContentResolver().query(uri, projection, null,
-                    null, null);
-
-            column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-            column_index_folder_name = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            while (cursor.moveToNext()) {
-                absolutePathOfImage = cursor.getString(column_index_data);
-
-                listOfAllImages.add(absolutePathOfImage);
-            }
-            return listOfAllImages;
-        }
-
-
-    }
     public void fullScreen() {
 
         // BEGIN_INCLUDE (get_current_ui_flags)
@@ -217,5 +129,96 @@ public class GallarySample extends Activity {
 
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
         //END_INCLUDE (set_ui_flags)
+    }
+
+    /**
+     * The Class ImageAdapter.
+     */
+    private class ImageAdapter extends BaseAdapter {
+
+        /**
+         * The context.
+         */
+        private Activity context;
+
+        /**
+         * Instantiates a new image adapter.
+         *
+         * @param localContext the local context
+         */
+        public ImageAdapter(Activity localContext) {
+            context = localContext;
+            images = getAllShownImagesPath(context);
+        }
+
+        public int getCount() {
+            return images.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(final int position, View convertView,
+                            ViewGroup parent) {
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = displayMetrics.heightPixels;
+            int width = displayMetrics.widthPixels;
+            ImageView picturesView;
+            if (convertView == null) {
+                picturesView = new ImageView(context);
+                picturesView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                picturesView
+                        .setLayoutParams(new GridView.LayoutParams(width / 2, width / 2));
+
+            } else {
+                picturesView = (ImageView) convertView;
+            }
+
+            Glide.with(context).load(images.get(position))
+                    .centerCrop()
+                    .into(picturesView);
+
+            return picturesView;
+        }
+
+        /**
+         * Getting All Images Path.
+         *
+         * @param activity the activity
+         * @return ArrayList with images Path
+         */
+        private ArrayList<String> getAllShownImagesPath(Activity activity) {
+            Uri uri;
+            Cursor cursor;
+            int column_index_data, column_index_folder_name;
+            ArrayList<String> listOfAllImages = new ArrayList<String>();
+            String absolutePathOfImage = null;
+            uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+            String[] projection = {MediaStore.MediaColumns.DATA,
+                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
+
+            cursor = activity.getContentResolver().query(uri, projection, null,
+                    null, null);
+
+            column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            column_index_folder_name = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+            while (cursor.moveToNext()) {
+                absolutePathOfImage = cursor.getString(column_index_data);
+
+                listOfAllImages.add(absolutePathOfImage);
+            }
+            return listOfAllImages;
+        }
+
+
     }
 }

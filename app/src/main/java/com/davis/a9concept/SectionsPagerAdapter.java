@@ -16,10 +16,10 @@ import java.util.List;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private List<String> albums;
-
     DynamicTabsActivity.OnImageSelected listener;
     ArrayList<String> selectedImages;
+    private List<String> albums;
+
     public SectionsPagerAdapter(FragmentManager fm, Context context, DynamicTabsActivity.OnImageSelected listener, ArrayList<String> selectedImages) {
         super(fm);
         Util util = new Util(context);
@@ -31,7 +31,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
+        // Return a StylePhotoFragment (defined as a static inner class below).
         return PlaceholderFragment.newInstance(position, listener, selectedImages);
     }
 

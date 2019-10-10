@@ -1,29 +1,18 @@
 package com.davis.a9concept;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +23,15 @@ import java.util.List;
 public class PlaceholderFragment extends Fragment implements RecyclerViewAdapter.ItemClickListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-
+    private ArrayList<String> selectedImages;
+    private DynamicTabsActivity.OnImageSelected listener;
     private PageViewModel pageViewModel;
     private RecyclerViewAdapter adapter;
 
-
-
-    ArrayList<String> selectedImages = new ArrayList<>();
-    DynamicTabsActivity.OnImageSelected listener;
+    private PlaceholderFragment(DynamicTabsActivity.OnImageSelected listener, ArrayList<String> selectedImages) {
+        this.listener = listener;
+        this.selectedImages = selectedImages;
+    }
 
     public static PlaceholderFragment newInstance(int index, DynamicTabsActivity.OnImageSelected listener, ArrayList<String> selectedImages) {
         PlaceholderFragment fragment = new PlaceholderFragment(listener, selectedImages);
@@ -49,11 +39,6 @@ public class PlaceholderFragment extends Fragment implements RecyclerViewAdapter
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    public PlaceholderFragment(DynamicTabsActivity.OnImageSelected listener, ArrayList<String> selectedImages){
-        this.listener = listener;
-        this.selectedImages = selectedImages;
     }
 
     @Override
@@ -84,13 +69,11 @@ public class PlaceholderFragment extends Fragment implements RecyclerViewAdapter
         pageViewModel.getText().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(@Nullable List<String> images) {
-                adapter = new RecyclerViewAdapter(context, images,selectedImages);
+                adapter = new RecyclerViewAdapter(context, images, selectedImages);
                 adapter.setClickListener(listener);
                 recyclerView.setAdapter(adapter);
             }
         });
-
-
 
 
         return root;
@@ -98,6 +81,6 @@ public class PlaceholderFragment extends Fragment implements RecyclerViewAdapter
 
     @Override
     public void onItemClick(View view, String position, RecyclerViewAdapter.OnAdapterImageAdded listenerAdapter) {
-        listener.onSelected(String.valueOf(position),listenerAdapter);
+        listener.onSelected(String.valueOf(position), listenerAdapter);
     }
 }

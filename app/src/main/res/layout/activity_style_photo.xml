@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StylePhotoActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/style_photo_add_shop_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/style_photo_backInventory"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:tint="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/style_photo_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/appfont_medium"
+            android:text="Select some pictures"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/style_photo_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/style_photo_bottom_container"
+        android:layout_marginTop="10dp" />
+
+
+    <RelativeLayout
+        android:id="@+id/style_photo_bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shadow_23921">
+
+        <TextView
+            android:id="@+id/go_selected_images"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="9dp"
+            android:background="@drawable/continue_greyed"
+            android:fontFamily="@font/appfont_bold"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:text="Checkout"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

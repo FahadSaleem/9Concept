@@ -22,6 +22,7 @@ public class CropActivity extends AppCompatActivity {
 
         String size = getIntent().getStringExtra("size");
         String uri = getIntent().getStringExtra("uri");
+        Toast.makeText(getApplicationContext(), size + " " + uri, Toast.LENGTH_SHORT).show();
         final ImageView backInventory = findViewById(R.id.backInventory);
         backInventory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,19 +30,17 @@ public class CropActivity extends AppCompatActivity {
                 finish();
             }
         });
-        if (size.equals("1")){
+        if (size.equals("1")) {
             CropImage.activity(Uri.parse(uri))
-                    .setAspectRatio(3,2)
+                    .setAspectRatio(3, 2)
                     .start(this);
-        }
-        else   if (size.equals("2")){
+        } else if (size.equals("2")) {
             CropImage.activity(Uri.parse(uri))
-                    .setAspectRatio(2,1)
+                    .setAspectRatio(2, 1)
                     .start(this);
-        }
-        else   if (size.equals("3")){
+        } else if (size.equals("3")) {
             CropImage.activity(Uri.parse(uri))
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(1, 1)
                     .start(this);
         }
 
@@ -63,14 +62,14 @@ public class CropActivity extends AppCompatActivity {
         }
     }
 
-    private void getDropboxIMGSize(Uri uri){
+    private void getDropboxIMGSize(Uri uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(new File(uri.getPath()).getAbsolutePath(), options);
         int imageHeight = options.outHeight;
         int imageWidth = options.outWidth;
 
-        Log.d("croppedImage","height: " + imageHeight + ", width: " + imageWidth);
+        Log.d("croppedImage", "height: " + imageHeight + ", width: " + imageWidth);
 
     }
 }

@@ -9,8 +9,6 @@ public class CustomScrollListener extends RecyclerView.OnScrollListener {
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
 
-
-
     }
 
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
