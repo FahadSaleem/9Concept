@@ -45,7 +45,7 @@ public class StylePhotoFragment extends Fragment {
     private LinearLayout mLinearLayout;
     private final int IMAGE_BASE_SIZE = 500;
     private String mImagePath;
-    private Boolean customCrop = false;
+    private Uri mImageUri = null;
 
     public static StylePhotoFragment newInstance(int index, ArrayList<String> selectedImages) {
         StylePhotoFragment fragment = new StylePhotoFragment();
@@ -99,7 +99,6 @@ public class StylePhotoFragment extends Fragment {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        customCrop = true;
                         if (mSelectedSize.id.equals("1")) {
                             CropImage.activity(Uri.fromFile(new File(s)))
                                     .setAspectRatio(3, 2)
@@ -127,6 +126,7 @@ public class StylePhotoFragment extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
+                mImageUri = resultUri;
                 imageView.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -136,13 +136,15 @@ public class StylePhotoFragment extends Fragment {
 
 
     private void loadImage() {
-        if (!customCrop) {
+        if (mImageUri == null) {
             Glide.with(Objects.requireNonNull(getContext()))
                     .load(mImagePath)
                     .override(IMAGE_BASE_SIZE * mSelectedSize.width,
                             IMAGE_BASE_SIZE * mSelectedSize.height)
                     .centerCrop()
                     .into(imageView);
+        } else {
+            imageView.setImageURI(mImageUri);
         }
     }
 
@@ -178,7 +180,7 @@ public class StylePhotoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mSelectedSize = s;
-                customCrop = false;
+                mImageUri = null;
                 FrameLayout layout;
                 ViewGroup row = (ViewGroup) view.getParent();
                 for (int itemPos = 0; itemPos < row.getChildCount(); itemPos++) {
