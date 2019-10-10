@@ -37,6 +37,9 @@ public class StylePhotoFragment extends Fragment {
     public Size mSelectedSize;
     private StylePhotoViewModel stylePhotoViewModel;
     private LinearLayout mLinearLayout;
+    private final int IMAGE_BASE_SIZE = 500;
+    private ImageView imageView;
+    private String mImagePath;
 
     public static StylePhotoFragment newInstance(int index, ArrayList<String> selectedImages) {
         StylePhotoFragment fragment = new StylePhotoFragment();
@@ -67,7 +70,7 @@ public class StylePhotoFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_style_photo, container, false);
         mLinearLayout = root.findViewById(R.id.style_photo_linear_layout);
-        final ImageView imageView = root.findViewById(R.id.style_photo_frag_img);
+        imageView = root.findViewById(R.id.style_photo_frag_img);
         stylePhotoViewModel.getSizeList().observe(this, new Observer<ArrayList<Size>>() {
             @Override
             public void onChanged(ArrayList<Size> sizes) {
@@ -80,9 +83,8 @@ public class StylePhotoFragment extends Fragment {
         stylePhotoViewModel.getImage().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable final String s) {
-                Glide.with(Objects.requireNonNull(getContext())).load(s)
-                        .centerCrop()
-                        .into(imageView);
+                mImagePath = s;
+                loadImage();
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -95,6 +97,15 @@ public class StylePhotoFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    private void loadImage() {
+        Glide.with(Objects.requireNonNull(getContext()))
+                .load(mImagePath)
+                .override(IMAGE_BASE_SIZE * mSelectedSize.width,
+                        IMAGE_BASE_SIZE * mSelectedSize.height)
+                .centerCrop()
+                .into(imageView);
     }
 
     private View generateSizeView(final Size s) {
@@ -142,6 +153,7 @@ public class StylePhotoFragment extends Fragment {
                             layout.setBackgroundColor(Color.TRANSPARENT);
                             textView1.setTextColor(Color.parseColor("#FF000000"));
                         }
+                        loadImage();
                     }
                 }
             }
@@ -152,10 +164,14 @@ public class StylePhotoFragment extends Fragment {
     public static class Size {
         String id;
         String value;
+        int height;
+        int width;
 
-        Size(String id, String value) {
+        Size(String id, int height, int width) {
             this.id = id;
-            this.value = value;
+            this.height = height;
+            this.width = width;
+            this.value = height + ":" + width;
         }
     }
 
@@ -167,9 +183,9 @@ public class StylePhotoFragment extends Fragment {
             public ArrayList<Size> apply(Integer input) {
 
                 ArrayList list = new ArrayList<Size>() {{
-                    add(new Size("1", "3:2"));
-                    add(new Size("2", "2:1"));
-                    add(new Size("3", "1:1"));
+                    add(new Size("1", 3, 2));
+                    add(new Size("2", 2, 1));
+                    add(new Size("3", 1, 1));
                 }};
                 return list;
             }
