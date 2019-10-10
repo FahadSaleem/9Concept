@@ -68,7 +68,9 @@ public class StylePhotoFragment extends Fragment {
         }
         stylePhotoViewModel.setIndex(index);
     }
+
     ImageView imageView;
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -82,7 +84,7 @@ public class StylePhotoFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Size> sizes) {
                 mSelectedSize = sizes.get(0);
-                Log.d("size",mSelectedSize.id + " " + mSelectedSize.value);
+                Log.d("size", mSelectedSize.id + " " + mSelectedSize.value);
                 for (final Size s : sizes) {
                     mLinearLayout.addView(generateSizeView(s));
                 }
@@ -123,7 +125,7 @@ public class StylePhotoFragment extends Fragment {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();;
+                Uri resultUri = result.getUri();
                 imageView.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -201,11 +203,11 @@ public class StylePhotoFragment extends Fragment {
         int height;
         int width;
 
-        Size(String id, int height, int width) {
+        Size(String id, int width, int height) {
             this.id = id;
             this.height = height;
             this.width = width;
-            this.value = height + ":" + width;
+            this.value = width + ":" + height;
         }
     }
 
