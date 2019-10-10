@@ -2,7 +2,9 @@ package com.davis.a9concept;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +25,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -60,18 +66,19 @@ public class StylePhotoFragment extends Fragment {
         }
         stylePhotoViewModel.setIndex(index);
     }
-
+    ImageView imageView;
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_style_photo, container, false);
         mLinearLayout = root.findViewById(R.id.style_photo_linear_layout);
-        final ImageView imageView = root.findViewById(R.id.style_photo_frag_img);
+       imageView = root.findViewById(R.id.style_photo_frag_img);
         stylePhotoViewModel.getSizeList().observe(this, new Observer<ArrayList<Size>>() {
             @Override
             public void onChanged(ArrayList<Size> sizes) {
                 mSelectedSize = sizes.get(0);
+                Log.d("size",mSelectedSize.id + " " + mSelectedSize.value);
                 for (final Size s : sizes) {
                     mLinearLayout.addView(generateSizeView(s));
                 }
@@ -86,17 +93,39 @@ public class StylePhotoFragment extends Fragment {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getContext(), CropActivity.class);
-                        intent.putExtra("size", mSelectedSize.id);
-                        intent.putExtra("uri", s);
-                        startActivity(intent);
+
+                        if (mSelectedSize.id.equals("1")) {
+                            CropImage.activity(Uri.fromFile(new File(s)))
+                                    .setAspectRatio(3, 2)
+                                    .start(getActivity());
+                        } else if (mSelectedSize.id.equals("2")) {
+                            CropImage.activity(Uri.fromFile(new File(s)))
+                                    .setAspectRatio(2, 1)
+                                    .start(getActivity());
+                        } else if (mSelectedSize.id.equals("3")) {
+                            CropImage.activity(Uri.fromFile(new File(s)))
+                                    .setAspectRatio(1, 1)
+                                    .start(getActivity());
+                        }
                     }
                 });
             }
         });
         return root;
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();;
+                imageView.setImageURI(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
     private View generateSizeView(final Size s) {
         final LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,

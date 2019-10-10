@@ -31,7 +31,7 @@ public class CropActivity extends AppCompatActivity {
             }
         });
         if (size.equals("1")) {
-            CropImage.activity(Uri.parse(uri))
+            CropImage.activity(Uri.fromFile(new File(uri)))
                     .setAspectRatio(3, 2)
                     .start(this);
         } else if (size.equals("2")) {
