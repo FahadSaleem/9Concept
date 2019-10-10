@@ -45,6 +45,7 @@ public class StylePhotoFragment extends Fragment {
     private LinearLayout mLinearLayout;
     private final int IMAGE_BASE_SIZE = 500;
     private String mImagePath;
+    private Boolean customCrop = false;
 
     public static StylePhotoFragment newInstance(int index, ArrayList<String> selectedImages) {
         StylePhotoFragment fragment = new StylePhotoFragment();
@@ -98,7 +99,7 @@ public class StylePhotoFragment extends Fragment {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        customCrop = true;
                         if (mSelectedSize.id.equals("1")) {
                             CropImage.activity(Uri.fromFile(new File(s)))
                                     .setAspectRatio(3, 2)
@@ -135,12 +136,14 @@ public class StylePhotoFragment extends Fragment {
 
 
     private void loadImage() {
-        Glide.with(Objects.requireNonNull(getContext()))
-                .load(mImagePath)
-                .override(IMAGE_BASE_SIZE * mSelectedSize.width,
-                        IMAGE_BASE_SIZE * mSelectedSize.height)
-                .centerCrop()
-                .into(imageView);
+        if (!customCrop) {
+            Glide.with(Objects.requireNonNull(getContext()))
+                    .load(mImagePath)
+                    .override(IMAGE_BASE_SIZE * mSelectedSize.width,
+                            IMAGE_BASE_SIZE * mSelectedSize.height)
+                    .centerCrop()
+                    .into(imageView);
+        }
     }
 
 
@@ -175,6 +178,7 @@ public class StylePhotoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mSelectedSize = s;
+                customCrop = false;
                 FrameLayout layout;
                 ViewGroup row = (ViewGroup) view.getParent();
                 for (int itemPos = 0; itemPos < row.getChildCount(); itemPos++) {
